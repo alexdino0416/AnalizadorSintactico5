@@ -1,0 +1,37 @@
+package Code;
+
+public enum Tokens {
+	Clase,
+	Int,
+	If,
+	Else,
+	Retorna,
+	Imprimir,
+	Access,
+	AbrePar,
+	CierraPar,
+	AbreLlave,
+	CierraLlave,
+	Asignar,
+	Mayor,
+	MayorIgual,
+	Menor,
+	MenorIgual,
+	Igual,
+	Diferente,
+	Suma,
+	Resta,
+	Multiplicacion,
+	Division,
+	Potencia,
+	Numero,
+	Identificador,
+	Variable,
+	Sumar,
+	Restar,
+	Multiplicar,
+	Dividir,
+	Elevar,
+	PuntoComa
+	
+}
