@@ -34,12 +34,10 @@ dividir {return new Symbol(sym.Dividir, yychar, yyline, yytext());}
 elevar {return new Symbol(sym.Elevar, yychar, yyline, yytext());}
 "(" {return new Symbol(sym.AbrePar, yychar, yyline, yytext());}
 ")" {return new Symbol(sym.CierraPar, yychar, yyline, yytext());}
-"==" {return new Symbol(sym.Igual, yychar, yyline, yytext());}
-"!=" {return new Symbol(sym.Diferente, yychar, yyline, yytext());}
-"<" {return new Symbol(sym.Menor, yychar, yyline, yytext());}
-"<=" {return new Symbol(sym.MenorIgual, yychar, yyline, yytext());}
-">" {return new Symbol(sym.Mayor, yychar, yyline, yytext());}
-">=" {return new Symbol(sym.MayorIgual, yychar, yyline, yytext());}
+/*Operadores Relacionales */
+( ">" | "<" | "==" | "!=" | ">=" | "<=" ) {return new Symbol(sym.Op_relacional, yychar, yyline, yytext());}
+/*Operadores Booleanos*/
+( true | false ) {return new Symbol(sym.Op_booleano, yychar, yyline, yytext());}
 "+" {return new Symbol(sym.Suma, yychar, yyline, yytext());}
 "-" {return new Symbol(sym.Resta, yychar, yyline, yytext());}
 "*" {return new Symbol(sym.Multiplicacion, yychar, yyline, yytext());}

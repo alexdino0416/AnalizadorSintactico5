@@ -33,12 +33,21 @@ else {lexeme=yytext(); return Else;}
 "/" {lexeme=yytext(); return Division;}
 "^" {lexeme=yytext(); return Potencia;}
 "=" {lexeme=yytext(); return Asignar;}
-"==" {lexeme=yytext(); return Igual;}
-"!=" {lexeme=yytext(); return Diferente;}
-"<" {lexeme=yytext(); return Menor;}
-"<=" {lexeme=yytext(); return MenorIgual;}
-">" {lexeme=yytext(); return Mayor;}
-">=" {lexeme=yytext(); return MayorIgual;}
+/* Operadores logicos */
+( "&&" | "||" | "!" | "&" | "|" ) {lexeme=yytext(); return Op_logico;}
+
+/*Operadores Relacionales */
+( ">" | "<" | "==" | "!=" | ">=" | "<=" | "<<" | ">>" ) {lexeme = yytext(); return Op_relacional;}
+
+/* Operadores Atribucion */
+( "+=" | "-="  | "*=" | "/=" | "%=" ) {lexeme = yytext(); return Op_atribucion;}
+
+/* Operadores Incremento y decremento */
+( "++" | "--" ) {lexeme = yytext(); return Op_incremento;}
+
+/*Operadores Booleanos*/
+(true | false)      {lexeme = yytext(); return Op_booleano;}
+
 ("(-"{N}+")") | {N}+ {lexeme=yytext(); return Numero;}
 {V}({V}|{N})+ {lexeme=yytext(); return Variable;}
 {L} {lexeme=yytext(); return Identificador;}

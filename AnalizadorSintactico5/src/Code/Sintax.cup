@@ -17,17 +17,81 @@ parser code
 
 terminal Clase, Int, If, Else, AbrePar, CierraPar, Igual, Diferente, Mayor, MayorIgual, Menor, MenorIgual; 
 terminal Suma, Sumar, Resta, Restar, Multiplicacion, Multiplicar, Division, Dividir, Potencia, Elevar, Access;
-terminal Retorna, Imprime, AbreLlave, CierraLlave, Asignar, Variable, Identificacior, PuntoComa, Error;
+terminal Retorna, Imprimir, AbreLlave, CierraLlave, Asignar, Variable, Identificador, PuntoComa, Error;
+terminal Op_relacional, Op_booleano;
 terminal Integer Numero;
-non terminal INICIO, SENTENCIA;
+non terminal INICIO, SENTENCIA, LISTA_SENTENCIA, DECLARACION,
+    SENTENCIA_BOOLEANA, FUNCTION, DECL_FUNCTION, CALL_FUNCTION,
+    RETORNAR, IF, IMPRIMIR, CONSTRUCTOR, DECLIST;
+non terminal Integer EXPRESSION;
+
+precedence left Suma, Resta;
+precedence left Multiplicacion, Division;
+precedence right Potencia;
 
 start with INICIO;
 
-INICIO ::= If AbrePar SENTENCIA:sen CierraPar {: RESULT = sen; :};
-
-SENTENCIA ::= Numero:n1 Mayor Numero:n2 {: RESULT = n1.intValue() > n2.intValue(); :}
-				| Numero:n1 MayorIgual Numero:n2 {: RESULT = n1.intValue() >= n2.intValue(); :}
-				| Numero:n1 Menor Numero:n2 {: RESULT = n1.intValue() < n2.intValue(); :}
-				| Numero:n1 MenorIgual Numero:n2 {: RESULT = n1.intValue() <= n2.intValue(); :}
-				| Numero:n1 Igual Numero:n2 {: RESULT = n1.intValue() == n2.intValue(); :}
-				| Numero:n1 Diferente Numero:n2 {: RESULT = n1.intValue() != n2.intValue(); :};
+INICIO ::=
+    Clase Identificador AbreLlave CierraLlave |
+    Clase Identificador AbreLlave CONSTRUCTOR CierraLlave |
+    Clase Identificador AbreLlave CONSTRUCTOR LISTA_SENTENCIA CierraLlave |
+    Clase Identificador AbreLlave LISTA_SENTENCIA CONSTRUCTOR CierraLlave |
+    Clase Identificador AbreLlave LISTA_SENTENCIA CierraLlave |
+    Clase Identificador AbreLlave LISTA_SENTENCIA CONSTRUCTOR LISTA_SENTENCIA CierraLlave
+;
+LISTA_SENTENCIA ::=
+    SENTENCIA |
+    LISTA_SENTENCIA SENTENCIA
+;
+SENTENCIA ::=
+    DECLARACION |
+    IF |
+    IMPRIMIR |
+    RETORNAR |
+    FUNCTION
+;
+EXPRESSION ::=
+    Numero:e {: RESULT = new Integer(e); :}
+    | EXPRESSION:e1 Suma EXPRESSION:e2 {: RESULT = new Integer((int)e1 + (int)e2);  :}
+    | EXPRESSION:e1 Resta EXPRESSION:e2 {: RESULT = new Integer((int)e1 - (int)e2);  :}
+    | EXPRESSION:e1 Multiplicacion EXPRESSION:e2 {: RESULT = new Integer((int)e1 * (int)e2); :}
+    | EXPRESSION:e1 Division EXPRESSION:e2 {: RESULT = new Integer((int)e1 / (int)e2); :}
+    | EXPRESSION:e1 Potencia EXPRESSION:e2 {: RESULT = new Integer((int) Math.pow((int)e1, (int)e2)); :}
+;
+DECLARACION ::=
+    Int Identificador PuntoComa |
+    Int Identificador Igual Numero PuntoComa
+;
+SENTENCIA_BOOLEANA ::=
+    Op_booleano |
+    Identificador Op_relacional Op_booleano |
+    Identificador Op_relacional Numero |
+    Identificador Op_relacional Identificador
+;
+RETORNAR ::=
+    Retorna Access EXPRESSION PuntoComa |
+    Retorna Access CALL_FUNCTION PuntoComa
+;
+IMPRIMIR ::=
+    Imprimir Access EXPRESSION:e PuntoComa
+  | Imprimir Access CALL_FUNCTION PuntoComa
+;
+IF ::=
+    If AbrePar SENTENCIA_BOOLEANA CierraPar AbreLlave SENTENCIA CierraLlave
+;
+CALL_FUNCTION ::=
+    Identificador AbrePar CierraPar
+    | Identificador AbrePar Numero CierraPar
+    | Identificador AbrePar Identificador CierraPar
+;
+DECL_FUNCTION ::=
+    Int Identificador AbrePar CierraPar |
+    Int Identificador AbrePar Int Identificador CierraPar
+;
+FUNCTION ::=
+    DECL_FUNCTION AbreLlave LISTA_SENTENCIA CierraLlave |
+    DECL_FUNCTION AbreLlave CierraLlave
+;
+CONSTRUCTOR ::=
+    Identificador AbrePar CierraPar AbreLlave LISTA_SENTENCIA CierraLlave
+;

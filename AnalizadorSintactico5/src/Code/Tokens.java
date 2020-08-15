@@ -32,6 +32,12 @@ public enum Tokens {
 	Multiplicar,
 	Dividir,
 	Elevar,
-	PuntoComa
+	PuntoComa,
+	Error,
+    Op_logico,
+    Op_relacional,
+    Op_atribucion,
+    Op_booleano,
+    Op_incremento
 	
 }
